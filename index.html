@@ -465,6 +465,10 @@
             align-items: center;
             gap: 12px;
             animation: msPulse 2s ease-in-out infinite;
+            cursor: pointer;
+        }
+        #tapBanner:hover {
+            background: #106ebe;
         }
         #tapBanner button {
             background: rgba(255,255,255,0.2);
@@ -580,7 +584,7 @@
                             </svg>
                             <span class="btn-txt" id="playLabel">Play greeting</span>
                         </button>
-                        <span class="ms-greeting-hint" id="greetingHint">Uses your browser's built‑in voice. Nothing is sent anywhere.</span>
+                        <span class="ms-greeting-hint" id="greetingHint">Tap the button to hear the greeting.</span>
                     </div>
                 </div>
             </div>
@@ -774,6 +778,7 @@
                 greetHint.textContent = "Your browser doesn't support voice playback. The message is shown above in text.";
                 return;
             }
+            // Cancel any ongoing speech
             try { window.speechSynthesis.cancel(); } catch (_) { }
             ttsUtter = new SpeechSynthesisUtterance(GREETING_TEXT);
             const v = pickVoice();
@@ -784,12 +789,21 @@
             ttsUtter.volume = 1.0;
             ttsUtter.onstart = () => setPlayingUI(true);
             ttsUtter.onend = () => setPlayingUI(false);
-            ttsUtter.onerror = () => { setPlayingUI(false); greetHint.textContent = "Voice playback was blocked or failed. The message is shown above in text."; };
+            ttsUtter.onerror = (e) => {
+                setPlayingUI(false);
+                greetHint.textContent = "Voice playback failed. Please try again.";
+                console.warn("Speech synthesis error:", e);
+            };
             window.speechSynthesis.speak(ttsUtter);
         }
 
-        playBtn.addEventListener("click", () => {
-            if (!supportsTTS) { speakGreeting(); return; }
+        // --- Play button click ---
+        playBtn.addEventListener("click", function(e) {
+            e.stopPropagation(); // prevent triggering any global tap listeners
+            if (!supportsTTS) {
+                speakGreeting(); // will show unsupported message
+                return;
+            }
             if (ttsPlaying) {
                 window.speechSynthesis.cancel();
                 setPlayingUI(false);
@@ -798,16 +812,20 @@
             }
         });
 
-        if (supportsTTS && typeof window.speechSynthesis.onvoiceschanged !== "undefined") {
-            window.speechSynthesis.onvoiceschanged = () => { /* no-op */ };
-        }
-        window.addEventListener("pagehide", () => { try { window.speechSynthesis.cancel(); } catch (_) { } });
+        // --- Tap-to-play banner (shown only if auto-play fails or on first visit) ---
+        // We'll try to auto-play once, and if it doesn't start, show the banner.
+        // We also show a banner if the user hasn't interacted and we want to prompt them.
+        // For maximum compatibility, we show the banner immediately on load,
+        // but we can also use a more subtle approach: show it only if auto-play fails.
 
-        // --- Auto-play greeting fallback -----------------------------------
+        // We'll try an auto-play attempt on load, but we know many browsers block it.
+        // So we also set up a banner that appears after a short delay if no speech started.
         (function autoGreet() {
             if (!supportsTTS) return;
+
             let played = false;
             let banner = null;
+            let autoPlayAttempted = false;
 
             function showTapBanner() {
                 if (banner || played) return;
@@ -815,11 +833,19 @@
                 banner.id = "tapBanner";
                 banner.setAttribute("role", "status");
                 banner.innerHTML = `
-                    <span>Tap anywhere to hear the greeting</span>
+                    <span>🔊 Tap to hear the greeting</span>
                     <button type="button" aria-label="Dismiss">×</button>
                 `;
                 document.body.appendChild(banner);
-                banner.querySelector("button").addEventListener("click", (e) => {
+
+                // Click on banner plays the greeting
+                banner.addEventListener("click", function(e) {
+                    if (e.target.tagName !== 'BUTTON') {
+                        tryPlay();
+                    }
+                });
+
+                banner.querySelector("button").addEventListener("click", function(e) {
                     e.stopPropagation();
                     if (banner) { banner.remove(); banner = null; }
                     played = true;
@@ -833,15 +859,10 @@
                 speakGreeting();
             }
 
-            function firstInteraction() {
-                tryPlay();
-                window.removeEventListener("pointerdown", firstInteraction, true);
-                window.removeEventListener("keydown", firstInteraction, true);
-                window.removeEventListener("touchstart", firstInteraction, true);
-            }
-
-            function attempt() {
-                if (played) return;
+            // Attempt auto-play on load
+            function attemptAutoPlay() {
+                if (autoPlayAttempted) return;
+                autoPlayAttempted = true;
                 try {
                     const u = new SpeechSynthesisUtterance(GREETING_TEXT);
                     const v = pickVoice();
@@ -849,36 +870,59 @@
                     u.lang = (v && v.lang) || "en-US";
                     u.rate = 0.98;
                     let started = false;
-                    u.onstart = () => { started = true; played = true; setPlayingUI(true); };
+                    u.onstart = () => {
+                        started = true;
+                        played = true;
+                        setPlayingUI(true);
+                        // If banner is shown, remove it
+                        if (banner) { banner.remove(); banner = null; }
+                    };
                     u.onend = () => setPlayingUI(false);
-                    u.onerror = () => { if (!started) showTapBanner(); };
+                    u.onerror = () => {
+                        if (!started) {
+                            // Auto-play failed, show banner after a short delay
+                            setTimeout(showTapBanner, 300);
+                        }
+                    };
                     window.speechSynthesis.cancel();
                     window.speechSynthesis.speak(u);
-                    setTimeout(() => { if (!started) { showTapBanner(); } }, 700);
-                } catch (_) { showTapBanner(); }
+                    // Also set a timeout: if speech doesn't start within 1.5s, show banner
+                    setTimeout(() => {
+                        if (!started && !played) {
+                            showTapBanner();
+                        }
+                    }, 1500);
+                } catch (_) {
+                    showTapBanner();
+                }
             }
 
+            // Wait for voices to be ready
             function waitForVoicesThenAttempt() {
                 const voices = window.speechSynthesis.getVoices();
-                if (voices && voices.length) { attempt(); return; }
+                if (voices && voices.length) {
+                    attemptAutoPlay();
+                    return;
+                }
                 let tries = 0;
                 const t = setInterval(() => {
                     tries++;
                     if ((window.speechSynthesis.getVoices() || []).length || tries > 8) {
-                        clearInterval(t); attempt();
+                        clearInterval(t);
+                        attemptAutoPlay();
                     }
                 }, 150);
             }
 
             if (document.readyState === "complete" || document.readyState === "interactive") {
-                setTimeout(waitForVoicesThenAttempt, 250);
+                setTimeout(waitForVoicesThenAttempt, 300);
             } else {
-                window.addEventListener("DOMContentLoaded", () => setTimeout(waitForVoicesThenAttempt, 250));
+                window.addEventListener("DOMContentLoaded", () => setTimeout(waitForVoicesThenAttempt, 300));
             }
 
-            window.addEventListener("pointerdown", firstInteraction, true);
-            window.addEventListener("keydown", firstInteraction, true);
-            window.addEventListener("touchstart", firstInteraction, true);
+            // Also, if user clicks anywhere on the page (except on the play button) and the banner is shown,
+            // we can play the greeting as a fallback. But we already have the banner click.
+            // We'll also allow the play button to work anytime.
         })();
 
         continueBtn.addEventListener("click", (e) => {
